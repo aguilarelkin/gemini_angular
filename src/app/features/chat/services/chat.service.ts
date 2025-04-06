@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, catchError, of } from 'rxjs';
 import { Message } from '../models/message.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TextResponse } from '../models/TextResponse';
 import { TextRequest } from '../models/TextRequest';
+import { error } from 'node:console';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,18 @@ export class ChatService {
     const req: TextRequest = { prompt };
     const userMessage: Message = { sender: 'user', text: prompt };
     this.addMessage(userMessage);
-    this.http.post<TextResponse>(this.API_URL, req).subscribe(aiMessage => {
+    this.http.post<TextResponse>(this.API_URL, req).pipe(
+      catchError((error: HttpErrorResponse) => {
+        const errorMessage: Message = {
+          sender: 'ai',
+          text: '😔 ¡Ups! Algo salió mal. Intenta nuevamente más tarde.'
+        };
+        this.addMessage(errorMessage);
+        console.error('Error al consultar el backend:', error);
+        return of();
+      })
+    ).subscribe(aiMessage => {
+
       this.addMessage({ sender: 'ai', text: aiMessage.response });
     });
 
