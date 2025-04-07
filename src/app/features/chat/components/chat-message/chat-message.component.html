@@ -6,7 +6,7 @@
   <div [ngClass]="{
       'bg-blue-600 text-white': message.sender === 'user',
       'bg-gray-800 text-white border border-gray-600': message.sender === 'ai'
-    }" class="max-w-full overflow-x-auto inline-block px-4 py-3 m-1 rounded-2xl max-w-xl whitespace-pre-wrap prose prose-invert"
+    }" class="max-w-full overflow-x-auto inline-block px-4 py-3 m-1 rounded-2xl  whitespace-pre-wrap prose prose-invert"
     [innerHTML]="formatMessage(message.text)">
   </div>
 </div>
