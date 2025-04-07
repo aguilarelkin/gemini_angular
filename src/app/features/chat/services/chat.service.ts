@@ -16,10 +16,11 @@ export class ChatService {
 
   constructor(private http: HttpClient) { }
   sendMessage(prompt: string) {
+    console.log(prompt)
     const req: TextRequest = { prompt };
     const userMessage: Message = { sender: 'user', text: prompt };
     this.addMessage(userMessage);
-    this.http.post<TextResponse>(this.API_URL, req).pipe(
+    this.http.post<TextResponse>(this.API_URL, { prompt}).pipe(
       catchError((error: HttpErrorResponse) => {
         const errorMessage: Message = {
           sender: 'ai',
@@ -37,6 +38,7 @@ export class ChatService {
   }
 
   addMessage(message: Message) {
+    console.log(message)
     const current = this.messagesSubject.getValue();
     this.messagesSubject.next([...current, message]);
   }

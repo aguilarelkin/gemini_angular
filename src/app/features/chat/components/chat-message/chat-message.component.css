@@ -1,0 +1,31 @@
+.prose {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.prose-invert {
+    color: #e5e7eb;
+}
+
+.chat-bubble {
+    background: #f9fafb;
+    padding: 1rem;
+    border-radius: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+    font-family: 'Segoe UI', sans-serif;
+    white-space: pre-wrap;
+}
+
+pre {
+    font-family: 'Fira Code', monospace;
+    background-color: #1e1e1e;
+    border-radius: 0.5rem;
+    padding: 10px;
+}
+
+code {
+    display: block;
+    background: none;
+}
