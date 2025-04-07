@@ -1,7 +1,8 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Message } from '../../models/message.model';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { LoadingService } from '../../../../components/loading/loading.service';
 
 @Component({
   selector: 'app-chat-message',
@@ -11,7 +12,7 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 })
 export class ChatMessageComponent {
   @Input() message!: Message;
-  constructor(private elRef: ElementRef,   private sanitizer: DomSanitizer){
+  constructor(  private sanitizer: DomSanitizer){
 
   }
   formatMessage(text: string): SafeHtml {

@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, of } from 'rxjs';
+import { BehaviorSubject, catchError, finalize, of } from 'rxjs';
 import { Message } from '../models/message.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { TextResponse } from '../models/TextResponse';
 import { TextRequest } from '../models/TextRequest';
 import { error } from 'node:console';
+import { LoadingService } from '../../../components/loading/loading.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,14 +15,16 @@ export class ChatService {
   messages$ = this.messagesSubject.asObservable();
   private readonly API_URL = 'http://localhost:8080/api/gemini/generate';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private loadingService: LoadingService) { }
 
   sendMessage(prompt: string) {
+    this.loadingService.show();
     /* const escapedPrompt = escapeStringForJSON(prompt); */
     const req: TextRequest = { prompt: JSON.stringify(prompt).slice(1, -1) };
     const userMessage: Message = { sender: 'user', text: prompt };
     this.addMessage(userMessage);
     this.http.post<TextResponse>(this.API_URL, req).pipe(
+      finalize(() => this.loadingService.hide()),
       catchError((error: HttpErrorResponse) => {
         const errorMessage: Message = {
           sender: 'ai',
