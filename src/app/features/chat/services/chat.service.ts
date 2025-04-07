@@ -15,12 +15,13 @@ export class ChatService {
   private readonly API_URL = 'http://localhost:8080/api/gemini/generate';
 
   constructor(private http: HttpClient) { }
+
   sendMessage(prompt: string) {
-    console.log(prompt)
-    const req: TextRequest = { prompt };
+    /* const escapedPrompt = escapeStringForJSON(prompt); */
+    const req: TextRequest = { prompt: JSON.stringify(prompt).slice(1, -1) };
     const userMessage: Message = { sender: 'user', text: prompt };
     this.addMessage(userMessage);
-    this.http.post<TextResponse>(this.API_URL, { prompt}).pipe(
+    this.http.post<TextResponse>(this.API_URL, req).pipe(
       catchError((error: HttpErrorResponse) => {
         const errorMessage: Message = {
           sender: 'ai',
@@ -38,7 +39,6 @@ export class ChatService {
   }
 
   addMessage(message: Message) {
-    console.log(message)
     const current = this.messagesSubject.getValue();
     this.messagesSubject.next([...current, message]);
   }
@@ -46,4 +46,15 @@ export class ChatService {
   clearMessages() {
     this.messagesSubject.next([]);
   }
+}
+function escapeStringForJSON(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/\//g, '\\/')
+    .replace(/\b/g, '\\b')
+    .replace(/\f/g, '\\f')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
 }
