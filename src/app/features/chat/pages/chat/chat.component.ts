@@ -16,7 +16,8 @@ import { LoadingService } from '../../../../components/loading/loading.service';
 export class ChatComponent {
   message = '';
   messages$: Observable<Message[]>;
-
+  siteKey = '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+  
   constructor(public chatService: ChatService, public loadingService: LoadingService) {
     this.messages$ = this.chatService.messages$;
   }
